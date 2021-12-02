@@ -29,15 +29,15 @@ ObjectPtr Dot2;
 ObjectPtr Dot3;
 
 int piano_text_index;
-int key_press[25];
-int key_index;
+int key_press[25] = { 0, };
+int key_index = 0;
 
 int Rudolf_Notes[14] = { 4, 5, 4, 2, 7, 5, 4, 4, 5, 4, 5, 4, 7, 6 };
 int Lookoutthewindow_Notes[16] = { 4, 4, 4, 4, 2, 4, 4, 4, 4, 2, 4, 4, 2, 4, 7, 6 };
 int Jinglebell_Notes[25] = { 2, 2, 2, 2, 2, 2, 2, 4, 0, 1, 2, 3, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 2, 1, 4 };
 SoundPtr Note[8];
 char path[20];
-int key;
+int stage = 1;
 
 void Piano_first() {
     
@@ -61,8 +61,13 @@ void Piano_first() {
             piano_text_index++;
         }
         else if (piano_text_index == 1) {
+            piano_text2->hide();
+            next_button1->hide();
+            piano_text3->show();
+            next_button2->show();
             Piano_Play1->enter();
             piano_text_index = 0;
+            
         }
         return true;
         });
@@ -75,6 +80,11 @@ void Piano_first() {
         }
       
         else if (piano_text_index == 1) {
+
+            piano_text4->hide();
+            next_button2->hide();
+            piano_text5->show();
+            next_button3->show();
             Piano_Play2->enter();
             piano_text_index = 0;
         }
@@ -89,6 +99,10 @@ void Piano_first() {
         }
 
         else if (piano_text_index == 1) {
+            piano_text6->hide();
+            next_button3->hide();
+            piano_text7->show();
+            next_button4->show();
             Piano_Play3->enter();
             piano_text_index = 0;
         }
@@ -121,7 +135,7 @@ void Piano_first() {
 
 
     Piano_Play1->setOnKeyboardCallback([&](ScenePtr scene2, KeyCode code, bool pressed)->bool {
-        key = 0;
+        int key = 0;
         if (pressed == true) {
         switch (code) {
         case KeyCode::KEY_1: key = 0; Note[0]->play(); Dot1->locate(Piano_Play1, 80, 20); break;
@@ -140,17 +154,19 @@ void Piano_first() {
          else key_index = 0;
 
         if (key_index == 14) {
-            piano_text3->show();
-            next_button2->show();
+            Piano_start->enter();
+            stage++;
+            key_index = 0;
      
             }
         
          };
+
         return true;
         });
 
     Piano_Play2->setOnKeyboardCallback([&](ScenePtr scene2, KeyCode code, bool pressed)->bool {
-        key = 0;
+        int key = 0;
         if (pressed == true) {
         switch (code) {
         case KeyCode::KEY_1: key = 0; Note[0]->play(); Dot2->locate(Piano_Play2, 80, 20); break;
@@ -168,8 +184,9 @@ void Piano_first() {
         else key_index = 0;
 
         if (key_index == 16) {
-             piano_text5->show();
-             next_button3->show();
+            Piano_start->enter();
+            stage++;
+            key_index = 0;
 
              }
 
@@ -178,7 +195,7 @@ void Piano_first() {
         });
 
     Piano_Play3->setOnKeyboardCallback([&](ScenePtr scene2, KeyCode code, bool pressed)->bool {
-        key = 0;
+        int key = 0;
         if (pressed == true) {
             switch (code) {
             case KeyCode::KEY_1: key = 0; Note[0]->play(); Dot3->locate(Piano_Play3, 80, 20); break;
@@ -198,8 +215,9 @@ void Piano_first() {
          else key_index = 0;
 
          if (key_index == 25) {
-             piano_text7->show();
-             next_button4->show();
+             Piano_start->enter();
+             stage++;
+             key_index = 0;
 
 
          }
@@ -219,17 +237,17 @@ void piano_init() {
 
     piano_text1 = Object::create("Images/piano_text1.png", Piano_start, 0, 0);
     piano_text2 = Object::create("Images/piano_text2.png", Piano_start, 0, 0);
-    piano_text3 = Object::create("Images/piano_text3.png", Piano_Play1, 0, 0);
-    piano_text4 = Object::create("Images/piano_text4.png", Piano_Play1, 0, 0);
-    piano_text5 = Object::create("Images/piano_text5.png", Piano_Play2, 0, 0);
-    piano_text6 = Object::create("Images/piano_text6.png", Piano_Play2, 0, 0);
-    piano_text7 = Object::create("Images/piano_text7.png", Piano_Play3, 0, 0);
-    piano_text8 = Object::create("Images/piano_text8.png", Piano_Play3, 0, 0);
+    piano_text3 = Object::create("Images/piano_text3.png", Piano_start, 0, 0);
+    piano_text4 = Object::create("Images/piano_text4.png", Piano_start, 0, 0);
+    piano_text5 = Object::create("Images/piano_text5.png", Piano_start, 0, 0);
+    piano_text6 = Object::create("Images/piano_text6.png", Piano_start, 0, 0);
+    piano_text7 = Object::create("Images/piano_text7.png", Piano_start, 0, 0);
+    piano_text8 = Object::create("Images/piano_text8.png", Piano_start, 0, 0);
     piano_gamerule = Object::create("Images/piano_gamerule.png", Piano_gamerule, 0, 0);
     next_button1 = Object::create("Images/next_button.png", Piano_start, 920, 40);
-    next_button2 = Object::create("Images/next_button.png", Piano_Play1, 920, 40);
-    next_button3 = Object::create("Images/next_button.png", Piano_Play2, 920, 40);
-    next_button4 = Object::create("Images/next_button.png", Piano_Play3, 920, 40);
+    next_button2 = Object::create("Images/next_button.png", Piano_start, 920, 40);
+    next_button3 = Object::create("Images/next_button.png", Piano_start, 920, 40);
+    next_button4 = Object::create("Images/next_button.png", Piano_start, 920, 40);
 
     piano_text_index = 0;
     Piano_Play1 = Scene::create("피아노", "Images/루돌프사슴코악보.png");
@@ -239,14 +257,6 @@ void piano_init() {
     Dot1 = Object::create("Images/점.png", Piano_Play1, -100, 20);
     Dot2 = Object::create("Images/점.png", Piano_Play2, -100, 20);
     Dot3 = Object::create("Images/점.png", Piano_Play3, -100, 20);
-
-
-    key_press[30] = { 0 };
-    key_index = 0;
-
-    
-
-    key = 0;
 
     for (int i = 0; i < 8; i++)
     {
